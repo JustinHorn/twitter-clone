@@ -1,0 +1,19 @@
+{
+  "name": "twitter-clone",
+  "version": "0.0.0",
+  "description": "A twitter clone to flex my skills",
+  "main": "index.js",
+  "scripts": {
+    "start":"node",
+    "watch":"nodemon",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "heroku-postbuild": "cd client && yarn --only=dev && yarn && yarn build"
+  },
+  "author": "Justin Horn",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "graphql-yoga": "^1.18.3",
+    "nodemon": "^2.0.4"
+  }
+}
