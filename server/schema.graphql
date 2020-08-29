@@ -1,0 +1,15 @@
+type Query {
+  hello: String!
+  feed: [Message!]!
+}
+
+type Mutation {
+  addMessage(author: String!, timeStamp: Int!, text: String!): Message!
+}
+
+type Message {
+  id: Int!
+  author: String!
+  timeStamp: Int!
+  text: String!
+}

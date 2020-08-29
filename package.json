@@ -4,8 +4,8 @@
   "description": "A twitter clone to flex my skills",
   "main": "index.js",
   "scripts": {
-    "start":"node",
-    "watch":"nodemon",
+    "start": "node",
+    "watch": "nodemon",
     "test": "echo \"Error: no test specified\" && exit 1",
     "heroku-postbuild": "cd client && yarn --only=dev && yarn && yarn build"
   },
@@ -14,6 +14,7 @@
   "dependencies": {
     "express": "^4.17.1",
     "graphql-yoga": "^1.18.3",
+    "moment": "^2.27.0",
     "nodemon": "^2.0.4"
   }
 }

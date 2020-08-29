@@ -1,0 +1,17 @@
+.message {
+  margin: 10px;
+  border: 1px solid black;
+  border-left-width: 0px;
+  border-right-width: 0px;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.author {
+  margin-right: 10px;
+}
+
+.text {
+  word-wrap: break-word;
+}

@@ -1,0 +1,23 @@
+.App {
+  text-align: center;
+  padding: 10px;
+}
+
+.textInput {
+  display: flex;
+  justify-content: center;
+}
+
+.textInput > * {
+  margin: 1px;
+}
+
+.textInput textarea {
+  resize: none;
+  flex-grow: 1;
+}
+
+.textInput button {
+  flex-grow: 1;
+  font-weight: bold;
+}
