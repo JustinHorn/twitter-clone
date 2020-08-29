@@ -4,12 +4,12 @@ type Query {
 }
 
 type Mutation {
-  addMessage(author: String!, timeStamp: Int!, text: String!): Message!
+  addMessage(author: String!, text: String!): Message!
 }
 
 type Message {
   id: Int!
+  timeStamp: String!
   author: String!
-  timeStamp: Int!
   text: String!
 }
