@@ -1,5 +1,16 @@
 const { prismaVersion } = require("@prisma/client");
 
+function newMessageSubscription(p, a, context, info) {
+  return context.pubsub.asyncIterator("NEW_MESSAGE");
+}
+
+const newMessage = {
+  subscribe: newMessageSubscription,
+  resolve: (payload) => {
+    return payload;
+  },
+};
+
 const resolvers = {
   Query: {
     hello: () => "Hello World!",
@@ -13,8 +24,12 @@ const resolvers = {
           text: args.text,
         },
       });
+      context.pubsub.publish("NEW_MESSAGE", message);
       return message;
     },
+  },
+  Subscription: {
+    newMessage,
   },
 };
 

@@ -7,6 +7,10 @@ type Mutation {
   addMessage(author: String!, text: String!): Message!
 }
 
+type Subscription {
+  newMessage: Message
+}
+
 type Message {
   id: Int!
   timeStamp: String!
