@@ -1,6 +1,18 @@
 type Query {
   hello: String!
-  feed: [Message!]!
+  feed(skip: Int, take: Int, orderBy: MessageOrderByInput): [Message!]!
+}
+
+input MessageOrderByInput {
+  id: Sort
+  author: Sort
+  text: Sort
+  timeStamp: Sort
+}
+
+enum Sort {
+  asc
+  desc
 }
 
 type Mutation {

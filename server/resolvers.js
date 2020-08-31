@@ -14,7 +14,12 @@ const newMessage = {
 const resolvers = {
   Query: {
     hello: () => "Hello World!",
-    feed: async (p, args, context) => await context.prisma.message.findMany(),
+    feed: async (p, args, context) =>
+      await context.prisma.message.findMany({
+        skip: args.skip,
+        take: args.take,
+        orderBy: args.orderBy,
+      }),
   },
   Mutation: {
     addMessage: (p, args, context) => {

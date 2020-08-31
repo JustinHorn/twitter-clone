@@ -4,7 +4,7 @@
   "description": "A twitter clone to flex my skills",
   "main": "index.js",
   "scripts": {
-    "start": "node",
+    "start": "node ./index.js",
     "watch": "nodemon -e .js,.graphql",
     "test": "echo \"Error: no test specified\" && exit 1",
     "heroku-postbuild": "cd client && yarn --only=dev && yarn && yarn build"

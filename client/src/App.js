@@ -6,8 +6,8 @@ import Message from "component/Message";
 import { gql, useQuery, useMutation } from "@apollo/client";
 
 const FEED_QUERY = gql`
-  query {
-    feed {
+  query feedQuery($take: Int, $skip: Int, $orderBy: MessageOrderByInput) {
+    feed(take: $take, skip: $skip, orderBy: $orderBy) {
       id
       author
       text
@@ -57,7 +57,9 @@ function App() {
 
   const [messages, setMessages] = useState([]);
 
-  const { subscribeToMore, loading, error, data } = useQuery(FEED_QUERY);
+  const { subscribeToMore, loading, error, data } = useQuery(FEED_QUERY, {
+    variables: { take: 10, orderBy: { id: "desc" } },
+  });
 
   useEffect(() => {
     if (data) {
@@ -115,7 +117,7 @@ function App() {
           id=""
           cols="30"
           rows="3"
-        ></textarea>
+        />
         <button onClick={send}>SEND</button>
       </div>
       <div className="messages">
