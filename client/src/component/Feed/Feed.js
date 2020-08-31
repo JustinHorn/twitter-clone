@@ -1,0 +1,74 @@
+import React, { useState, useEffect } from "react";
+
+import Message from "component/Message";
+
+import { gql, useQuery } from "@apollo/client";
+
+const FEED_QUERY = gql`
+  query feedQuery($take: Int, $skip: Int, $orderBy: MessageOrderByInput) {
+    feed(take: $take, skip: $skip, orderBy: $orderBy) {
+      id
+      author
+      text
+      timeStamp
+    }
+  }
+`;
+
+const MESSAGE_SUBSCRIPTION = gql`
+  subscription newMessage {
+    newMessage {
+      id
+      author
+      text
+      timeStamp
+    }
+  }
+`;
+
+const Feed = () => {
+  const [messages, setMessages] = useState([]);
+
+  const { subscribeToMore, loading, error, data } = useQuery(FEED_QUERY, {
+    variables: { take: 10, orderBy: { timeStamp: "desc" } },
+  });
+
+  useEffect(() => {
+    if (data) {
+      const feed = data.feed.map((x) => ({
+        ...x,
+        timeStamp: Number(x.timeStamp),
+      }));
+      setMessages(feed);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    subscribeToMore({
+      document: MESSAGE_SUBSCRIPTION,
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData) return prev;
+        const newItem = subscriptionData.data.newMessage;
+        return Object.assign({}, prev, {
+          feed: [newItem, ...prev.feed],
+        });
+      },
+    });
+  }, []);
+
+  if (loading) return <div>loading</div>;
+  if (error) {
+    console.log(error);
+    return <div>error</div>;
+  }
+
+  return (
+    <div className="messages">
+      {messages.map((x, index) => (
+        <Message key={index} {...x} />
+      ))}
+    </div>
+  );
+};
+
+export default Feed;
