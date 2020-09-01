@@ -15,9 +15,12 @@ const pubsub = new PubSub();
 const server = new GraphQLServer({
   typeDefs: "./server/schema.graphql",
   resolvers,
-  context: {
-    prisma,
-    pubsub,
+  context: (request) => {
+    return {
+      ...request,
+      prisma,
+      pubsub,
+    };
   },
 });
 

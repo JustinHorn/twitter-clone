@@ -1,11 +1,11 @@
 type Query {
   hello: String!
   feed(skip: Int, take: Int, orderBy: MessageOrderByInput): [Message!]!
+  users(skip: Int, take: Int): [User!]!
 }
 
 input MessageOrderByInput {
   id: Sort
-  author: Sort
   text: Sort
   timeStamp: Sort
 }
@@ -16,7 +16,15 @@ enum Sort {
 }
 
 type Mutation {
-  addMessage(author: String!, text: String!): Message!
+  login(email: String!, password: String!): AuthPayload
+  register(name: String!, email: String!, password: String!): AuthPayload
+
+  addMessage(text: String!): Message!
+}
+
+type AuthPayload {
+  user: User!
+  token: String!
 }
 
 type Subscription {
@@ -26,6 +34,13 @@ type Subscription {
 type Message {
   id: Int!
   timeStamp: String!
-  author: String!
   text: String!
+  postedBy: User
+}
+
+type User {
+  id: Int!
+  name: String!
+  email: String!
+  messages: [Message]
 }

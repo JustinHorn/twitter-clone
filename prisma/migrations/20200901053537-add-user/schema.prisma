@@ -1,6 +1,6 @@
 datasource db {
     provider = "sqlite"
-    url      = "file:./dev.db"
+    url = "***"
 }
 
 // 2
@@ -10,6 +10,7 @@ generator client {
 
 model Message {
     id         Int      @id @default(autoincrement())
+    author     String
     timeStamp  DateTime @default(now())
     text       String
     postedBy   User?    @relation(fields: [postedById], references: [id])
