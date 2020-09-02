@@ -5,12 +5,14 @@ import Post from "component/Post";
 
 import Feed from "component/Feed";
 
-const author = "me" + Math.random();
+import Authentication from "component/Authentication";
 
 function App() {
   return (
     <div className="App">
-      <Post author={author} />
+      <Authentication> </Authentication>
+
+      <Post />
       <Feed />
     </div>
   );

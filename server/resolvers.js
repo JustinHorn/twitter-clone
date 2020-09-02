@@ -41,6 +41,15 @@ const resolvers = {
         take: args.take,
       });
     },
+    authorize: async (p, args, context) => {
+      const userId = getUserId(context);
+      const user = context.prisma.user.findOne({ where: { id: userId } });
+      if (!user) {
+        throw new Error("No user found");
+      }
+
+      return user;
+    },
   },
   Mutation: {
     register: async (parent, args, context, info) => {
@@ -56,7 +65,7 @@ const resolvers = {
       };
     },
     login: async (parent, args, context, info) => {
-      const user = context.prisma.user.findOne({
+      const user = await context.prisma.user.findOne({
         where: { email: args.email },
       });
 
@@ -69,7 +78,7 @@ const resolvers = {
         throw new Error("Invalid password");
       }
 
-      const token = jwt.sign({ userId: user.id }, APP_SECRET);
+      const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET);
 
       return {
         token,

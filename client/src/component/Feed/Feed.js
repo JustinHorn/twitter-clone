@@ -8,7 +8,9 @@ const FEED_QUERY = gql`
   query feedQuery($take: Int, $skip: Int, $orderBy: MessageOrderByInput) {
     feed(take: $take, skip: $skip, orderBy: $orderBy) {
       id
-      author
+      postedBy {
+        name
+      }
       text
       timeStamp
     }
@@ -19,7 +21,9 @@ const MESSAGE_SUBSCRIPTION = gql`
   subscription newMessage {
     newMessage {
       id
-      author
+      postedBy {
+        name
+      }
       text
       timeStamp
     }
@@ -37,6 +41,7 @@ const Feed = () => {
     if (data) {
       const feed = data.feed.map((x) => ({
         ...x,
+        author: x.postedBy?.name,
         timeStamp: Number(x.timeStamp),
       }));
       setMessages(feed);
@@ -49,6 +54,7 @@ const Feed = () => {
       updateQuery: (prev, { subscriptionData }) => {
         if (!subscriptionData) return prev;
         const newItem = subscriptionData.data.newMessage;
+        newItem.author = newItem.postedBy.name;
         return Object.assign({}, prev, {
           feed: [newItem, ...prev.feed],
         });

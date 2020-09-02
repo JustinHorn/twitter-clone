@@ -2,6 +2,7 @@ type Query {
   hello: String!
   feed(skip: Int, take: Int, orderBy: MessageOrderByInput): [Message!]!
   users(skip: Int, take: Int): [User!]!
+  authorize: User
 }
 
 input MessageOrderByInput {

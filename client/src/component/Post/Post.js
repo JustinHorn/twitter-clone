@@ -3,17 +3,19 @@ import React, { useState, useEffect } from "react";
 import { gql, useQuery, useMutation } from "@apollo/client";
 
 const ADDMESSAGE_MUTATION = gql`
-  mutation addMessageMutation($author: String!, $text: String!) {
-    addMessage(author: $author, text: $text) {
+  mutation addMessageMutation($text: String!) {
+    addMessage(text: $text) {
       id
-      author
+      postedBy {
+        name
+      }
       text
       timeStamp
     }
   }
 `;
 
-const Post = ({ author }) => {
+const Post = () => {
   const [text, setText] = useState("");
 
   const updateText = (e) => {
@@ -33,7 +35,7 @@ const Post = ({ author }) => {
   const send = (e) => {
     if (isTextLegit(text)) {
       e.preventDefault();
-      mutate({ variables: { author: author, text } });
+      mutate({ variables: { text } });
       setText("");
     }
   };

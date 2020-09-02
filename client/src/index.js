@@ -5,7 +5,7 @@ import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 
 import { ApolloProvider, ApolloClient, HttpLink, split } from "@apollo/client";
-import { InMemoryCache } from "apollo-boost";
+import { InMemoryCache, ApolloLink } from "apollo-boost";
 
 import { getMainDefinition } from "@apollo/client/utilities";
 
@@ -22,6 +22,20 @@ const httpLink = new HttpLink({
   uri: "http://localhost:4000/graphql",
 });
 
+const authLink = new ApolloLink((operation, forward) => {
+  // Retrieve the authorization token from local storage.
+  const token = localStorage.getItem("auth_token");
+
+  // Use the setContext method to set the HTTP headers.
+  operation.setContext({
+    headers: {
+      authorization: token ? `Bearer ${token}` : "",
+    },
+  });
+
+  // Call the next link in the middleware chain.
+  return forward(operation);
+});
 const link = process.browser
   ? split(
       ({ query }) => {
@@ -37,7 +51,7 @@ const link = process.browser
   : httpLink;
 
 const client = new ApolloClient({
-  link,
+  link: authLink.concat(link),
   cache: new InMemoryCache(),
 });
 
