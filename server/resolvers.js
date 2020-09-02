@@ -43,11 +43,20 @@ const resolvers = {
     },
     authorize: async (p, args, context) => {
       const userId = getUserId(context);
-      const user = context.prisma.user.findOne({ where: { id: userId } });
+      const user = await context.prisma.user.findOne({ where: { id: userId } });
       if (!user) {
         throw new Error("No user found");
       }
 
+      return user;
+    },
+    user: async (p, args, context) => {
+      const user = await context.prisma.user.findOne({
+        where: { id: args.id },
+      });
+      if (!user) {
+        throw new Error("User with id does not exist");
+      }
       return user;
     },
   },

@@ -3,6 +3,7 @@ type Query {
   feed(skip: Int, take: Int, orderBy: MessageOrderByInput): [Message!]!
   users(skip: Int, take: Int): [User!]!
   authorize: User
+  user(id: Int!): User
 }
 
 input MessageOrderByInput {
