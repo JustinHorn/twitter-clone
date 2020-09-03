@@ -19,6 +19,7 @@ const isDevelopment =
 const host = isDevelopment ? "localhost:4000" : location;
 
 const socket = location.includes("localhost") ? "ws" : "wss";
+const protocol = location.includes("localhost") ? "http" : "https";
 
 const wsLink = process.browser
   ? new WebSocketLink({
@@ -28,7 +29,7 @@ const wsLink = process.browser
   : null;
 
 const httpLink = new HttpLink({
-  uri: `http://${host}/graphql`,
+  uri: `${protocol}://${host}/graphql`,
 });
 
 const authLink = new ApolloLink((operation, forward) => {
