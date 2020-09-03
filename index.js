@@ -28,7 +28,7 @@ const server = new GraphQLServer({
 });
 
 const options = {
-  port: process.env.port || 4000,
+  port: process.env.PORT || 4000,
   endpoint: "/graphql",
   playground: "/graphql",
 };
