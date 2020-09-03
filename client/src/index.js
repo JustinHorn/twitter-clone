@@ -11,6 +11,9 @@ import { getMainDefinition } from "@apollo/client/utilities";
 
 import { WebSocketLink } from "@apollo/client/link/ws";
 
+const isLocal = window.location.host.includes("localhost");
+console.log("is local: " + isLocal);
+
 const wsLink = process.browser
   ? new WebSocketLink({
       uri: "ws://localhost:4000/",
