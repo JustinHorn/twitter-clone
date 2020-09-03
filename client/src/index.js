@@ -18,9 +18,11 @@ const isDevelopment =
 
 const host = isDevelopment ? "localhost:4000" : location;
 
+const socket = location.includes("localhost") ? "ws" : "wss";
+
 const wsLink = process.browser
   ? new WebSocketLink({
-      uri: `ws://${host}/`,
+      uri: `${socket}://${host}/`,
       options: { reconnect: true },
     })
   : null;
