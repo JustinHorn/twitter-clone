@@ -11,18 +11,22 @@ import { getMainDefinition } from "@apollo/client/utilities";
 
 import { WebSocketLink } from "@apollo/client/link/ws";
 
-const isLocal = window.location.host.includes("localhost");
-console.log("is local: " + isLocal);
+const location = window.location.host;
+
+const isDevelopment =
+  location.includes("localhost") && !location.includes("4000");
+
+const host = isDevelopment ? "localhost:4000" : location;
 
 const wsLink = process.browser
   ? new WebSocketLink({
-      uri: "ws://localhost:4000/",
+      uri: `ws://${host}/`,
       options: { reconnect: true },
     })
   : null;
 
 const httpLink = new HttpLink({
-  uri: "http://localhost:4000/graphql",
+  uri: `http://${host}/graphql`,
 });
 
 const authLink = new ApolloLink((operation, forward) => {
