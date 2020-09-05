@@ -20,6 +20,16 @@ import { useQuery } from "@apollo/client";
 import Message from "component/Message";
 
 function App() {
+  const [show, setShow] = useState("not");
+
+  const getOnClick = (type) => () => {
+    if (type === show) {
+      setShow("not");
+    } else {
+      setShow(type);
+    }
+  };
+
   return (
     <div className="App">
       <Router>
@@ -28,8 +38,23 @@ function App() {
             <UserFeed></UserFeed>
           </Route>
           <Route path="/">
-            <Authentication> </Authentication>
+            <div className="nav">
+              {["Login", "Register"].map((option) => (
+                <>
+                  <button
+                    type="checkbox"
+                    className={option === show ? "active" : ""}
+                    onClick={getOnClick(option)}
+                  >
+                    {option}
+                  </button>
+                </>
+              ))}
+            </div>
 
+            <div className={show === "not" ? "hide" : ""}>
+              <Authentication isLogin={show === "Login"}> </Authentication>
+            </div>
             <Post />
             <Feed />
           </Route>

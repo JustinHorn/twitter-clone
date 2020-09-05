@@ -21,3 +21,15 @@
   flex-grow: 1;
   font-weight: bold;
 }
+
+.active {
+  background-color: red;
+}
+
+.nav {
+  text-align: right;
+}
+
+.hide {
+  opacity: 0;
+}

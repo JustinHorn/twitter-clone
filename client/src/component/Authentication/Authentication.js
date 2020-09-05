@@ -41,12 +41,10 @@ const query_authorize = gql`
   }
 `;
 
-const Authentication = () => {
+const Authentication = ({ isLogin }) => {
   const { loading: q_loading, error: q_error, data: q_data } = useQuery(
     query_authorize
   );
-
-  const [isLogin, setIsLogin] = useState(true);
 
   const [mutate, { data, error }] = useMutation(
     isLogin ? mutation_login : mutation_register
@@ -94,18 +92,6 @@ const Authentication = () => {
     <div>
       {(!user && (
         <>
-          <label htmlFor="">Login</label>
-          <input
-            type="checkbox"
-            checked={isLogin}
-            onClick={() => setIsLogin(true)}
-          />
-          <label htmlFor="">Register</label>
-          <input
-            type="checkbox"
-            checked={!isLogin}
-            onClick={() => setIsLogin(false)}
-          />
           <h2>{isLogin ? "Login" : "Register"}</h2>
           <input
             type="text"
