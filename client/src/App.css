@@ -22,14 +22,10 @@
   font-weight: bold;
 }
 
-.active {
-  background-color: red;
-}
-
-.nav {
+nav {
   text-align: right;
 }
 
-.hide {
-  opacity: 0;
+.active {
+  background-color: red;
 }

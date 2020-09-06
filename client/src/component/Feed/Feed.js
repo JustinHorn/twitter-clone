@@ -4,6 +4,8 @@ import Message from "component/Message";
 
 import { gql, useQuery } from "@apollo/client";
 
+import { showFeed } from "helper";
+
 const FEED_QUERY = gql`
   query feedQuery($take: Int, $skip: Int, $orderBy: MessageOrderByInput) {
     feed(take: $take, skip: $skip, orderBy: $orderBy) {
@@ -33,23 +35,9 @@ const MESSAGE_SUBSCRIPTION = gql`
 `;
 
 const Feed = () => {
-  const [messages, setMessages] = useState([]);
-
   const { subscribeToMore, loading, error, data } = useQuery(FEED_QUERY, {
     variables: { take: 10, orderBy: { timeStamp: "desc" } },
   });
-
-  useEffect(() => {
-    if (data) {
-      const feed = data.feed.map((x) => ({
-        ...x,
-        author: x.postedBy?.name,
-        userId: x.postedBy?.id,
-        timeStamp: Number(x.timeStamp),
-      }));
-      setMessages(feed);
-    }
-  }, [data]);
 
   useEffect(() => {
     subscribeToMore({
@@ -66,19 +54,14 @@ const Feed = () => {
     });
   }, []);
 
-  if (loading) return <div>loading</div>;
-  if (error) {
-    console.log(error);
-    return <div>error</div>;
-  }
+  const messages = data?.feed.map((x) => ({
+    ...x,
+    author: x.postedBy?.name,
+    userId: x.postedBy?.id,
+    timeStamp: Number(x.timeStamp),
+  }));
 
-  return (
-    <div className="messages">
-      {messages.map((x, index) => (
-        <Message key={index} {...x} />
-      ))}
-    </div>
-  );
+  return showFeed(loading, error, messages);
 };
 
 export default Feed;

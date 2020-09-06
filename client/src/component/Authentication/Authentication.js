@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 
 import { gql } from "apollo-boost";
 import { useMutation, useQuery } from "@apollo/client";
+import UserContext from "context";
 
-const author = "me" + Math.random();
+import styles from "./authentication.module.css";
 
 const mutation_login = gql`
   mutation LoginMutation($email: String!, $password: String!) {
@@ -31,37 +32,12 @@ const mutation_register = gql`
   }
 `;
 
-const query_authorize = gql`
-  query {
-    authorize {
-      id
-      name
-      email
-    }
-  }
-`;
-
 const Authentication = ({ isLogin }) => {
-  const { loading: q_loading, error: q_error, data: q_data } = useQuery(
-    query_authorize
-  );
-
   const [mutate, { data, error }] = useMutation(
     isLogin ? mutation_login : mutation_register
   );
 
-  const [user, setUser] = useState();
-
-  const confirm = async (data) => {
-    const source = isLogin ? data.login : data.register;
-    setUser(source.user);
-    const { token } = source;
-    saveUserData(token);
-  };
-
-  const saveUserData = (token) => {
-    localStorage.setItem("auth_token", token);
-  };
+  const { user, login } = useContext(UserContext);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -73,24 +49,14 @@ const Authentication = ({ isLogin }) => {
 
   useEffect(() => {
     if (data) {
-      confirm(data);
+      const source = isLogin ? data.login : data.register;
+      login(source.user, source.token);
     }
   }, [data]);
 
-  useEffect(() => {
-    if (q_data) {
-      setUser(q_data.authorize);
-    }
-  }, [q_data]);
-
-  const logout = () => {
-    localStorage.setItem("auth_token", "");
-    setUser(null);
-  };
-
   return (
-    <div>
-      {(!user && (
+    <div className={styles.main}>
+      {!user && (
         <>
           <h2>{isLogin ? "Login" : "Register"}</h2>
           <input
@@ -121,9 +87,7 @@ const Authentication = ({ isLogin }) => {
             {isLogin ? "Login" : "Register"}
           </button>
         </>
-      )) || <button onClick={logout}>Logout</button>}
-
-      <h1>Hello {user?.name}</h1>
+      )}
     </div>
   );
 };

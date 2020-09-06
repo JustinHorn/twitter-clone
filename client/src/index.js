@@ -11,6 +11,8 @@ import { getMainDefinition } from "@apollo/client/utilities";
 
 import { WebSocketLink } from "@apollo/client/link/ws";
 
+import { UserContextProvider } from "context";
+
 const location = window.location.host;
 
 const isDevelopment =
@@ -66,11 +68,13 @@ const client = new ApolloClient({
 });
 
 ReactDOM.render(
-  <ApolloProvider client={client}>
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
-  </ApolloProvider>,
+  <React.StrictMode>
+    <ApolloProvider client={client}>
+      <UserContextProvider>
+        <App />
+      </UserContextProvider>
+    </ApolloProvider>
+  </React.StrictMode>,
   document.getElementById("root")
 );
 
